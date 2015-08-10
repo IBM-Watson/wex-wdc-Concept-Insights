@@ -1,0 +1,11 @@
+---
+services:
+- wex-ConceptInsights
+applications:
+- name: wex-ConceptInsights
+  disk_quota: 1024M
+  host: wex-ConceptInsights
+  path: target/wex-wdc-ConceptInsights-sample.war
+  domain: mybluemix.net
+  instances: 1
+  memory: 512M

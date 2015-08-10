@@ -1,0 +1,84 @@
+<%
+# net/http library is required to make the POST call.
+require 'net/http'
+require 'json'
+require 'uri'
+
+origin = URI.parse(request.original_url)
+endpoint_builder = {
+  :host => origin.host,
+  :port => origin.port,
+  :scheme => origin.scheme,
+  :path => '/proxy/ci/'
+}
+url = URI::HTTP.build(endpoint_builder)
+# Get the current entity title and escape HTML string
+ids = escape_javascript(raw(subject.field_value("title").text_value))
+# Use corpus test for this integration, and you can change the corpus name here
+corpusName = "test"
+data = {:ids => ids.to_s, :corpusName => corpusName.to_s}.to_json
+req = Net::HTTP::Post.new(url.to_s)
+req.body = data
+req.add_field('Content-Type', 'application/json')
+http = Net::HTTP.start(url.hostname, url.port)
+response = http.request(req)
+resp = JSON.parse(response.body)
+# Checke if there is an error message in response 
+if !resp["error"].nil? && !resp["error"].empty?
+ %>
+ <p style="color:#FF0000">No similar entities found.</p>
+ <%
+end
+# Check if the similar entities are found in Concept Insights service
+if !resp["results"].nil? && !resp["results"].empty?
+  resp["results"].each do |t|
+    t['id'] = URI.unescape(t['id'].gsub('+', '%20'))
+    # Do a query in Index to check if the document still exists
+    if !entity_types('DataForCI').where(field('title').is(t['id'])).nil? && t['id']!= subject.title.to_s
+      resultURL = origin.host.to_s + ':' + origin.port.to_s + '/AppBuilder/redirect?entity_type=DataForCI&field_value=' + t['id']
+%>
+<div class="resultID"><a href="<%= resultURL %>"><%= t['id'] %></a></div>
+  <div class="score">Score for similarity: <%= t['score'] %></div>
+<%
+end 
+end
+%>
+<br />
+<div class="details">Shared concepts:</div>
+<% end %>
+<%
+if !resp["concepts"].nil? && !resp["concepts"].empty?
+  resp["concepts"].each do |c|
+%>
+<div class="concept"><a href="<%= c['link'] %>"><%= c["label"] %></a></div>
+<% end %>
+<% end %>
+
+
+<style>
+  .details {
+    font-size: .875em;
+    margin: 3px;
+  }
+     
+  .resultID {
+    font-size: 1em;
+  }
+
+  .concepts {
+    border-bottom: 1px solid #e6e6e6;
+    margin-bottom: 0.9em;
+    font-size: 0.8em;
+  }
+
+   .score {
+     transition: all 0.5s;
+     font-size: 0.6em;
+     border-bottom: 1px solid transparent;
+     padding: 0.2em 0 0em 0;
+     margin-right: 0.2em;
+     margin-bottom: 0.5em;
+     display: inline-block;
+     cursor: pointer;
+   }
+</style>
