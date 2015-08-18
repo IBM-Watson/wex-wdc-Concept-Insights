@@ -182,6 +182,7 @@ Make the following changes to the sample Proxy.
    
    `set :ci_endpoint, "http://YOUR_BLUEMIX_HOST.mybluemix.net/api/search"`
 3. Enter the `lib/proxy.rb` file and add the following code block
+
    ```
 	post '/ci/' do
    		data = JSON.load(request.body)
