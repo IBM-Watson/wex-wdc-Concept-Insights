@@ -81,9 +81,9 @@ There are alternative methods for adding XML to your Engine installation, includ
 ### Create a new collection with the Web Services Converter
 
  1. Navigate to your Watson Explorer Engine administrative interface.  Select the "Configuration" menu.  Click the "+" next to the "Search Collections" item in the left menu to create a new collection.
- 2. For "Copy defaults from" select "example-appbuilder".  This allows us to start with a pre-configured small example collection.  Name the collection and click the **Add** button at right.
+ 2. For "Copy defaults from" select "example-metadata".  This allows us to start with a pre-configured small example collection.  Name the collection and click the **Add** button at right.
  3. Select your collection's "Configuration" and then the "Converting" tab.  Click the **Add a new converter** button.  Scroll down and select the "Web Services" converter and click **Add**.
- 4. In the "Web Service endpoint URL" text box, supply the endpoint URL for your application which exposes the Concept Insights service, which will be: http://YOUR_BLUEMIX_APP.mybluemix.net/api/createDoc.
+ 4. In the "Web Service endpoint URL" text box, supply the endpoint URL for your application which exposes the Concept Insights service, which will be: http://YOUR_BLUEMIX_HOST.mybluemix.net/api/createDoc.
  5. In the "Contents to send as name/value pairs" text area, enter "name", "data" and "corpusName" on different lines without quotes.  Click the **OK** button at right.
 
 ### Create the custom converter which pre-processes the text
