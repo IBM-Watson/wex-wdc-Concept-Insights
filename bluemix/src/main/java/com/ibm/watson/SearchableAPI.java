@@ -68,7 +68,7 @@ public class SearchableAPI {
 			// Prepare the HTTP connection to the service
 
 			String nameEn = URLEncoder.encode(ids, "UTF-8");
-			String query = "func=" + func + "&ids=[\"/corpus/" + username + "/test/" + nameEn + "\"]";
+			String query = "func=" + func + "&ids=[\"/corpus/" + username + "/" + corpusName + "/" + nameEn + "\"]";
 			corpusName = URLEncoder.encode(corpusName, "UTF-8");
 			String corpusURL = username + "/" + corpusName + "?";
 			conn = (HttpURLConnection) new URL(serverURL + apiURL + corpusURL + query)
