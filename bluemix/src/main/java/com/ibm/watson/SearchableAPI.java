@@ -94,8 +94,13 @@ public class SearchableAPI {
 			
 			// Return the response from the service
 			//System.out.println("the result is: " + buf.toString());
-			return buf.toString();
-			
+
+                        // Ensure that we are returning JSON by creating a new
+                        // JSONObject.  This will throw an exception if we receive
+                        // a null string or malformed JSON from the service.
+                        JSONObject response = new JSONObject(buf.toString());
+                        return response.toString();
+
 		} catch(Exception e){
 			e.printStackTrace();
 			return "{\"error\":\"" + e.getClass().getName() + "\"}";
